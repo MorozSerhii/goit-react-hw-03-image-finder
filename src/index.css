@@ -188,6 +188,8 @@ justify-content: center;
 * Стили компонента Buton (Load more)
 */
 .Button {
+  margin:  0 auto;
+  max-width: 200px;
   padding: 8px 16px;
   border-radius: 2px;
   background-color: #3f51b5;

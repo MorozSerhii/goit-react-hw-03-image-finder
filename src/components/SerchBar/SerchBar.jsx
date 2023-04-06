@@ -1,18 +1,29 @@
 import { Component } from 'react';
+import { FiSearch } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 import 'index.css';
-
+import 'react-toastify/dist/ReactToastify.css';
 export class SearchBar extends Component {
   state = {
     searchQuery: '',
   };
 
   handelChange = e => {
-    this.setState({ searchQuery: e.target.value });
+    this.setState({ searchQuery: e.target.value.trim() });
   };
 
   onSubmit = e => {
     e.preventDefault();
+    if (this.state.searchQuery.trim() === '') {
+      toast.info('Please enter something', {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false,
+      });
+      return;
+    }
     const { searchQuery } = this.state;
+
     this.props.onSubmit(searchQuery);
     this.onReset();
   };
@@ -27,6 +38,7 @@ export class SearchBar extends Component {
         <form className="SearchForm" onSubmit={this.onSubmit}>
           <button type="submit" className="SearchForm-button">
             <span className="SearchForm-button-label">Search</span>
+            <FiSearch />
           </button>
 
           <input
@@ -43,3 +55,7 @@ export class SearchBar extends Component {
     );
   }
 }
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func,
+  onReset: PropTypes.func,
+};
