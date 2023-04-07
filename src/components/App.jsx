@@ -6,7 +6,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 import { Button } from './Button/Button';
-import { ToastContainer } from 'react-toastify';
+import toast, { Toaster } from 'react-hot-toast';
 export class App extends Component {
   state = {
     images: [],
@@ -27,16 +27,23 @@ export class App extends Component {
   }
 
   setSearchQuery = query => {
+    const { page, value } = this.state;
     this.setState({ value: query, page: 1 });
+    if (query === value) {
+      this.SearchImages(query, page);
+    }
   };
 
   SearchImages = async (values, page) => {
     try {
-      this.setState({ isLoading: true });
+      this.setState({ isLoading: true, isDisabled: false });
       const data = await Api.SerchImage(values, page);
       const totalHits = Math.ceil(data.totalHits / 12);
       if (totalHits === 0) {
-        console.log('No hits found');
+        toast.error('write something normal 😵‍💫', {
+          duration: 1000,
+          position: 'top-right',
+        });
         return;
       }
       this.setState({ TotalHits: totalHits });
@@ -47,6 +54,8 @@ export class App extends Component {
       }));
     } catch (error) {
       throw new Error(error);
+    } finally {
+      this.setState({ isLoading: false });
     }
   };
   openModal = img => {
@@ -98,7 +107,7 @@ export class App extends Component {
         {isDisabled && TotalHits !== page && (
           <Button loadMore={this.loadMorePage} />
         )}
-        <ToastContainer autoClose={1000} />
+        <Toaster />
       </div>
     );
   }

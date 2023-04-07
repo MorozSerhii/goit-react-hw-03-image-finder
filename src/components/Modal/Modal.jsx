@@ -1,6 +1,7 @@
 import 'index.css';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { ImCancelCircle } from 'react-icons/im';
 
 export class Modal extends Component {
   componentDidMount() {
@@ -14,10 +15,20 @@ export class Modal extends Component {
       this.props.modalShown();
     }
   };
+
   render() {
     return (
       <div className="Overlay">
         <div className="Modal">
+          <button
+            className="modalCloseBtn"
+            type="button"
+            onClick={() => {
+              this.props.modalShown();
+            }}
+          >
+            <ImCancelCircle className="iconX" />
+          </button>
           <img src={this.props.value} alt="" />
         </div>
       </div>
