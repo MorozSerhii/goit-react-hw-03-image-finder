@@ -2,6 +2,7 @@ import 'index.css';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ImCancelCircle } from 'react-icons/im';
+import { motion } from 'framer-motion';
 
 export class Modal extends Component {
   componentDidMount() {
@@ -19,7 +20,13 @@ export class Modal extends Component {
   render() {
     return (
       <div className="Overlay">
-        <div className="Modal">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ ease: 'easeIn', duration: 0.5 }}
+          className="Modal"
+        >
           <button
             className="modalCloseBtn"
             type="button"
@@ -29,8 +36,8 @@ export class Modal extends Component {
           >
             <ImCancelCircle className="iconX" />
           </button>
-          <img src={this.props.value} alt="" />
-        </div>
+          <img className="modalImg" src={this.props.value} alt="" />
+        </motion.div>
       </div>
     );
   }
