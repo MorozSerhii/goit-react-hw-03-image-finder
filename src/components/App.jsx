@@ -1,7 +1,7 @@
 import 'index.css';
 import { Component } from 'react';
 import { SearchBar } from './SerchBar/SerchBar';
-import * as Api from './Api/Api';
+import * as Api from '../Api/Api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
@@ -22,7 +22,7 @@ export class App extends Component {
   componentDidUpdate(_, prevState) {
     const { page, value } = this.state;
     if (prevState.page !== page || prevState.value !== value) {
-      this.SearchImages(value, page);
+      this.searchImages(value, page);
     }
   }
 
@@ -30,11 +30,11 @@ export class App extends Component {
     const { page, value } = this.state;
     this.setState({ value: query, page: 1 });
     if (query === value) {
-      this.SearchImages(query, page);
+      this.searchImages(query, page);
     }
   };
 
-  SearchImages = async (values, page) => {
+  searchImages = async (values, page) => {
     try {
       this.setState({ isLoading: true, isDisabled: false });
       const data = await Api.SerchImage(values, page);
@@ -101,7 +101,9 @@ export class App extends Component {
     return (
       <div className="App">
         <SearchBar onSubmit={this.setSearchQuery} onReset={this.onReset} />
-        <ImageGallery images={images} modalShown={this.openModal} />
+        {images.length > 0 && (
+          <ImageGallery images={images} modalShown={this.openModal} />
+        )}
         {isLoading && <Loader />}
         {modalShown && <Modal value={largeImg} modalShown={this.openModal} />}
         {isDisabled && TotalHits !== page && (
